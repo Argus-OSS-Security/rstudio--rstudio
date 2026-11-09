@@ -1,11 +1,12 @@
 name: "Test: E2E Playwright RStudio (Desktop, macOS 26 ARM64, Open Source, Scheduled)"
 
-on:
-  schedule:
-    # Mon-Fri at 02:00 UTC -- daily run against latest source on main.
-    - cron: '0 2 * * 1-5'
-  workflow_dispatch:
-
+# Triggers intentionally disabled for Argus-OSS-Security.
+# on:
+#   schedule:
+#     # Mon-Fri at 02:00 UTC -- daily run against latest source on main.
+#     - cron: '0 2 * * 1-5'
+#   workflow_dispatch:
+# 
 permissions:
   contents: read
   pull-requests: write

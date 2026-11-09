@@ -10,21 +10,22 @@ name: "Test: E2E Playwright RStudio (Shard count)"
 #
 # Runs on Linux because it only needs a sparse checkout and jq.
 
-on:
-  workflow_call:
-    inputs:
-      platform:
-        description: 'Key to read from .github/e2e/shards.json, e.g. "macos".'
-        type: string
-        required: true
-    outputs:
-      count:
-        description: "Number of shards, e.g. 6."
-        value: ${{ jobs.shards.outputs.count }}
-      matrix:
-        description: "JSON list of 1-based shard indices for strategy.matrix, e.g. [1,2,3,4,5,6]."
-        value: ${{ jobs.shards.outputs.matrix }}
-
+# Triggers intentionally disabled for Argus-OSS-Security.
+# on:
+#   workflow_call:
+#     inputs:
+#       platform:
+#         description: 'Key to read from .github/e2e/shards.json, e.g. "macos".'
+#         type: string
+#         required: true
+#     outputs:
+#       count:
+#         description: "Number of shards, e.g. 6."
+#         value: ${{ jobs.shards.outputs.count }}
+#       matrix:
+#         description: "JSON list of 1-based shard indices for strategy.matrix, e.g. [1,2,3,4,5,6]."
+#         value: ${{ jobs.shards.outputs.matrix }}
+# 
 permissions:
   contents: read
 

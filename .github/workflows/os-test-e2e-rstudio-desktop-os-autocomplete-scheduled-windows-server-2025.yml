@@ -1,74 +1,75 @@
 name: "Test: E2E Playwright RStudio Autocomplete Scheduled (Desktop, Windows Server 2025 x64, Open Source)"
 
-on:
-  schedule:
-    - cron: '0 8,20 * * *'
-  workflow_dispatch:
-    inputs:
-      rstudio_installer_url:
-        description: "URL to a Desktop installer (.deb on Ubuntu, .rpm on RHEL/Fedora, .exe on Windows, .dmg on macOS). Leave empty to auto-resolve the latest daily for this workflow's platform. To pin a specific build, paste its full URL from dailies.rstudio.com."
-        type: string
-        default: ""
-      r_version:
-        description: >-
-          Exact R version to install, as X.Y.Z. Empty (the default) uses
-          RSTUDIO_R_VERSION from dependencies/tools/rstudio-tools.sh, which is
-          the single place the version CI tests against is pinned. Any version
-          named here must already be mirrored into rstudio-buildtools; see
-          dependencies/tools/upload-r.sh.
-        type: string
-        default: ""
-      project:
-        description: "Playwright project to run: 'desktop' or 'server'. OS and edition are auto-filtered from the host platform and PW_RSTUDIO_EDITION."
-        type: string
-        default: "desktop"
-      grep:
-        description: "Optional Playwright --grep pattern to run only tests whose title matches."
-        type: string
-        default: ""
-      test_selector:
-        description: "Optional test paths/files/directories to run (space-separated). Matched as substrings against test file paths. Examples: 'autocomplete.test.ts', 'tests/panes/misc/', 'autocomplete tests/panes/posit-assistant-chat/'. Leave empty to run all tests (default runs autocomplete tests)."
-        type: string
-        default: "autocomplete.test.ts"
-      test_ignore:
-        description: "Optional test paths/files/directories to exclude (space-separated globs). Examples: '**/code_suggestions.test.ts', '**/posit-assistant-chat/**'. Leave empty to exclude nothing."
-        type: string
-        default: ""
-      grep_invert:
-        description: "Optional Playwright --grep-invert pattern to skip tests by title."
-        type: string
-        default: ""
-      rstudio_extra_args:
-        description: "Optional extra args passed to RStudio Desktop on launch (space-separated). Maps to PW_RSTUDIO_EXTRA_ARGS."
-        type: string
-        default: ""
-  workflow_call:
-    inputs:
-      rstudio_installer_url:
-        type: string
-        default: ""
-      r_version:
-        type: string
-        default: ""
-      project:
-        type: string
-        default: "desktop"
-      grep:
-        type: string
-        default: ""
-      test_selector:
-        type: string
-        default: "autocomplete.test.ts"
-      test_ignore:
-        type: string
-        default: ""
-      grep_invert:
-        type: string
-        default: ""
-      rstudio_extra_args:
-        type: string
-        default: ""
-
+# Triggers intentionally disabled for Argus-OSS-Security.
+# on:
+#   schedule:
+#     - cron: '0 8,20 * * *'
+#   workflow_dispatch:
+#     inputs:
+#       rstudio_installer_url:
+#         description: "URL to a Desktop installer (.deb on Ubuntu, .rpm on RHEL/Fedora, .exe on Windows, .dmg on macOS). Leave empty to auto-resolve the latest daily for this workflow's platform. To pin a specific build, paste its full URL from dailies.rstudio.com."
+#         type: string
+#         default: ""
+#       r_version:
+#         description: >-
+#           Exact R version to install, as X.Y.Z. Empty (the default) uses
+#           RSTUDIO_R_VERSION from dependencies/tools/rstudio-tools.sh, which is
+#           the single place the version CI tests against is pinned. Any version
+#           named here must already be mirrored into rstudio-buildtools; see
+#           dependencies/tools/upload-r.sh.
+#         type: string
+#         default: ""
+#       project:
+#         description: "Playwright project to run: 'desktop' or 'server'. OS and edition are auto-filtered from the host platform and PW_RSTUDIO_EDITION."
+#         type: string
+#         default: "desktop"
+#       grep:
+#         description: "Optional Playwright --grep pattern to run only tests whose title matches."
+#         type: string
+#         default: ""
+#       test_selector:
+#         description: "Optional test paths/files/directories to run (space-separated). Matched as substrings against test file paths. Examples: 'autocomplete.test.ts', 'tests/panes/misc/', 'autocomplete tests/panes/posit-assistant-chat/'. Leave empty to run all tests (default runs autocomplete tests)."
+#         type: string
+#         default: "autocomplete.test.ts"
+#       test_ignore:
+#         description: "Optional test paths/files/directories to exclude (space-separated globs). Examples: '**/code_suggestions.test.ts', '**/posit-assistant-chat/**'. Leave empty to exclude nothing."
+#         type: string
+#         default: ""
+#       grep_invert:
+#         description: "Optional Playwright --grep-invert pattern to skip tests by title."
+#         type: string
+#         default: ""
+#       rstudio_extra_args:
+#         description: "Optional extra args passed to RStudio Desktop on launch (space-separated). Maps to PW_RSTUDIO_EXTRA_ARGS."
+#         type: string
+#         default: ""
+#   workflow_call:
+#     inputs:
+#       rstudio_installer_url:
+#         type: string
+#         default: ""
+#       r_version:
+#         type: string
+#         default: ""
+#       project:
+#         type: string
+#         default: "desktop"
+#       grep:
+#         type: string
+#         default: ""
+#       test_selector:
+#         type: string
+#         default: "autocomplete.test.ts"
+#       test_ignore:
+#         type: string
+#         default: ""
+#       grep_invert:
+#         type: string
+#         default: ""
+#       rstudio_extra_args:
+#         type: string
+#         default: ""
+# 
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false

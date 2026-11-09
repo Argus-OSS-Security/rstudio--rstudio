@@ -14,39 +14,40 @@ name: "Cache Seed: E2E Playwright RStudio (Desktop, Ubuntu 24, Open Source)"
 # The rstudio-tools and build-time R package caches are shared with the Linux
 # Server seed (same keys); the GWT cache key is desktop-specific
 # (rstudio-gwt-linux-desktop-x86_64-PRETTY-v1-), so this seeder warms it on main.
-on:
-  # Re-seed when files under dependencies/ change. This glob is deliberately a
-  # broad superset of the exact hashFiles() patterns that feed the cache keys
-  # (see the build workflow), so the trigger paths don't have to stay in
-  # lockstep with those patterns. Most edits here re-run the seed without
-  # rotating any cache key (refreshing recency only); an edit that touches one
-  # of the hashed files additionally rotates the affected key, saving a fresh
-  # cache on main.
-  push:
-    branches: [main]
-    paths:
-      - "dependencies/**"
-      - ".github/workflows/os-test-e2e-rstudio-desktop-linux.yml"
-      - ".github/e2e-linux/ubuntu-24-x86_64.json"
-      # The seeded engine's build-time hook. It doesn't exist today (the
-      # ubuntu script dir has only an e2e hook, which this build_only seed
-      # never runs), but listing it now means a future build hook re-seeds
-      # instead of leaving the caches keyed to pre-hook output. Deliberately
-      # not the whole script dir: e2e-only hook edits can't affect these
-      # caches, so watching them would just burn seed runs.
-      - ".github/e2e-linux/ubuntu/build-setup.sh"
-      - ".github/workflows/os-cache-seed-e2e-rstudio-desktop-os-ubuntu-24.yml"
-  # Nightly re-seed keeps the GHA sccache object cache recent on main so PR
-  # builds get a high compile-cache hit rate. GitHub evicts cache entries that
-  # haven't been accessed in 7 days. Offset from the Linux Server seed (07:00)
-  # so the two don't contend for runners at the same minute.
-  schedule:
-    - cron: '30 7 * * *'
-  # Also dispatched by os-cache-seed-sentinel.yml when this seed's caches
-  # have been evicted from main's scope (repo quota, LRU eviction).
-  workflow_dispatch:
-
-# Don't stack expensive ubuntu builds; the latest seed run wins.
+# Triggers intentionally disabled for Argus-OSS-Security.
+# on:
+#   # Re-seed when files under dependencies/ change. This glob is deliberately a
+#   # broad superset of the exact hashFiles() patterns that feed the cache keys
+#   # (see the build workflow), so the trigger paths don't have to stay in
+#   # lockstep with those patterns. Most edits here re-run the seed without
+#   # rotating any cache key (refreshing recency only); an edit that touches one
+#   # of the hashed files additionally rotates the affected key, saving a fresh
+#   # cache on main.
+#   push:
+#     branches: [main]
+#     paths:
+#       - "dependencies/**"
+#       - ".github/workflows/os-test-e2e-rstudio-desktop-linux.yml"
+#       - ".github/e2e-linux/ubuntu-24-x86_64.json"
+#       # The seeded engine's build-time hook. It doesn't exist today (the
+#       # ubuntu script dir has only an e2e hook, which this build_only seed
+#       # never runs), but listing it now means a future build hook re-seeds
+#       # instead of leaving the caches keyed to pre-hook output. Deliberately
+#       # not the whole script dir: e2e-only hook edits can't affect these
+#       # caches, so watching them would just burn seed runs.
+#       - ".github/e2e-linux/ubuntu/build-setup.sh"
+#       - ".github/workflows/os-cache-seed-e2e-rstudio-desktop-os-ubuntu-24.yml"
+#   # Nightly re-seed keeps the GHA sccache object cache recent on main so PR
+#   # builds get a high compile-cache hit rate. GitHub evicts cache entries that
+#   # haven't been accessed in 7 days. Offset from the Linux Server seed (07:00)
+#   # so the two don't contend for runners at the same minute.
+#   schedule:
+#     - cron: '30 7 * * *'
+#   # Also dispatched by os-cache-seed-sentinel.yml when this seed's caches
+#   # have been evicted from main's scope (repo quota, LRU eviction).
+#   workflow_dispatch:
+# 
+# # Don't stack expensive ubuntu builds; the latest seed run wins.
 concurrency:
   group: cache-seed-desktop-ubuntu24
   cancel-in-progress: true

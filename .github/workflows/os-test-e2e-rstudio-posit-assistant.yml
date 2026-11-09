@@ -27,11 +27,12 @@ name: "Test: E2E Playwright RStudio (Posit Assistant Release Gate, Open Source)"
 # from reporting "safe to promote" -- see the engines' own step for why a
 # zero-test run otherwise looks clean.
 
-on:
-  schedule:
-    - cron: '30 7 * * 1,4'   # Monday and Thursday 07:30 UTC (3:30 AM EDT)
-  workflow_dispatch: {}
-
+# Triggers intentionally disabled for Argus-OSS-Security.
+# on:
+#   schedule:
+#     - cron: '30 7 * * 1,4'   # Monday and Thursday 07:30 UTC (3:30 AM EDT)
+#   workflow_dispatch: {}
+# 
 concurrency:
   group: pw-posit-assistant-gate
   cancel-in-progress: false

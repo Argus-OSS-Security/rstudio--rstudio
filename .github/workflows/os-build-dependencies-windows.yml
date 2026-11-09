@@ -27,22 +27,23 @@
 
 name: "Build Dependencies (Windows, Open Source)"
 
-on:
-  workflow_dispatch:
-    inputs:
-      boost_version:
-        description: "Boost version to build"
-        type: string
-        default: "1.91.0"
-      soci_version:
-        description: "SOCI version to build"
-        type: string
-        default: "4.0.3"
-      upload:
-        description: "Upload the built archives to s3://rstudio-buildtools"
-        type: boolean
-        default: false
-
+# Triggers intentionally disabled for Argus-OSS-Security.
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       boost_version:
+#         description: "Boost version to build"
+#         type: string
+#         default: "1.91.0"
+#       soci_version:
+#         description: "SOCI version to build"
+#         type: string
+#         default: "4.0.3"
+#       upload:
+#         description: "Upload the built archives to s3://rstudio-buildtools"
+#         type: boolean
+#         default: false
+# 
 permissions:
   contents: read
   id-token: write

@@ -1,36 +1,37 @@
 name: "Test: E2E Playwright RStudio (PR-triggered)"
 
-on:
-  pull_request:
-    paths:
-      - "CMakeLists.txt"
-      - "src/**"
-      - "dependencies/**"
-      - "cmake/**"
-      - "package/**"
-      - "e2e/rstudio/**"
-      - ".github/actions/os-e2e-deps/**"
-      - ".github/actions/os-publish-e2e-report/**"
-      - ".github/actions/os-resolve-daily-manifest/**"
-      - ".github/actions/os-resolve-daily-urls/**"
-      # version/RELEASE picks which branch's daily every platform resolves, so
-      # a change to it changes the binary under test. A flower with no daily
-      # yet resolves to a source build via decide(), which is the answer we
-      # want to see proven on the PR that renames it rather than in the next
-      # cron rotation.
-      - "version/RELEASE"
-      - ".github/workflows/os-test-e2e-rstudio-pr.yml"
-      - ".github/workflows/os-test-e2e-rstudio-desktop-os-windows-server-2025.yml"
-      - ".github/workflows/os-test-e2e-rstudio-desktop-os-macos-26-arm64.yml"
-      - ".github/workflows/os-test-e2e-rstudio-desktop-linux.yml"
-      - ".github/workflows/os-test-e2e-rstudio-server-os-ubuntu-24.yml"
-      - ".github/e2e-linux/**"
-      # The shard counts and the plumbing that reads them: a count change
-      # should be proven on the PR that makes it.
-      - ".github/e2e/shards.json"
-      - ".github/actions/os-e2e-shards/**"
-      - ".github/workflows/os-test-e2e-rstudio-shards.yml"
-
+# Triggers intentionally disabled for Argus-OSS-Security.
+# on:
+#   pull_request:
+#     paths:
+#       - "CMakeLists.txt"
+#       - "src/**"
+#       - "dependencies/**"
+#       - "cmake/**"
+#       - "package/**"
+#       - "e2e/rstudio/**"
+#       - ".github/actions/os-e2e-deps/**"
+#       - ".github/actions/os-publish-e2e-report/**"
+#       - ".github/actions/os-resolve-daily-manifest/**"
+#       - ".github/actions/os-resolve-daily-urls/**"
+#       # version/RELEASE picks which branch's daily every platform resolves, so
+#       # a change to it changes the binary under test. A flower with no daily
+#       # yet resolves to a source build via decide(), which is the answer we
+#       # want to see proven on the PR that renames it rather than in the next
+#       # cron rotation.
+#       - "version/RELEASE"
+#       - ".github/workflows/os-test-e2e-rstudio-pr.yml"
+#       - ".github/workflows/os-test-e2e-rstudio-desktop-os-windows-server-2025.yml"
+#       - ".github/workflows/os-test-e2e-rstudio-desktop-os-macos-26-arm64.yml"
+#       - ".github/workflows/os-test-e2e-rstudio-desktop-linux.yml"
+#       - ".github/workflows/os-test-e2e-rstudio-server-os-ubuntu-24.yml"
+#       - ".github/e2e-linux/**"
+#       # The shard counts and the plumbing that reads them: a count change
+#       # should be proven on the PR that makes it.
+#       - ".github/e2e/shards.json"
+#       - ".github/actions/os-e2e-shards/**"
+#       - ".github/workflows/os-test-e2e-rstudio-shards.yml"
+# 
 concurrency:
   group: pw-pr-${{ github.event.pull_request.number }}
   cancel-in-progress: true

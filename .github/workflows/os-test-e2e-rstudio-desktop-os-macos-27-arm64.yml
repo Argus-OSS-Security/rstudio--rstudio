@@ -16,134 +16,135 @@ name: "Test: E2E Playwright RStudio (Desktop, macOS 27 ARM64, Open Source)"
 # scheduled rotation reaches it twice a week: the Tuesday weekday slate, and
 # the Sunday macOS+Windows run it joins by virtue of its platform tag.
 
-on:
-  workflow_dispatch:
-    inputs:
-      build_from_source:
-        description: "Build RStudio Desktop from this branch's source. When false, downloads the latest daily .dmg installer."
-        type: boolean
-        default: true
-      rstudio_installer_url:
-        description: "Optional .dmg URL to test against (e.g. a specific daily from dailies.rstudio.com). Only used when build_from_source is false. Leave empty to auto-resolve the latest daily."
-        type: string
-        default: ""
-      r_version:
-        description: >-
-          Exact R version to install, as X.Y.Z. Empty (the default) uses
-          RSTUDIO_R_VERSION from dependencies/tools/rstudio-tools.sh, which is
-          the single place the version CI tests against is pinned. Any version
-          named here must already be mirrored into rstudio-buildtools; see
-          dependencies/tools/upload-r.sh.
-        type: string
-        default: ""
-      project:
-        description: "Playwright project to run: 'desktop' or 'server'. OS and edition are auto-filtered from the host platform and PW_RSTUDIO_EDITION."
-        type: string
-        default: "desktop"
-      grep:
-        description: "Optional Playwright --grep pattern to run only tests whose title matches."
-        type: string
-        default: ""
-      test_selector:
-        description: "Optional test paths/files/directories to run (space-separated). Matched as substrings against test file paths. Examples: 'autocomplete.test.ts', 'tests/panes/misc/', 'autocomplete tests/panes/posit-assistant-chat/'. Leave empty to run all tests."
-        type: string
-        default: ""
-      test_ignore:
-        description: "Optional test paths/files/directories to exclude (space-separated globs). Examples: '**/code_suggestions.test.ts', '**/posit-assistant-chat/**'. Leave empty to exclude nothing."
-        type: string
-        default: ""
-      grep_invert:
-        description: "Optional Playwright --grep-invert pattern to skip tests by title. Empty by default (runs all tests)."
-        type: string
-        default: ""
-      rstudio_extra_args:
-        description: "Optional extra args passed to RStudio Desktop on launch (space-separated). Maps to PW_RSTUDIO_EXTRA_ARGS."
-        type: string
-        default: ""
-      posit_assistant_test_manifest:
-        description: "Test the pre-release (test) Posit Assistant manifest instead of the released one. Off by default: only the Posit Assistant release gate turns this on."
-        type: boolean
-        default: false
-      require_tests_passed:
-        description: "Fail the run if it passed zero tests. For release gates, where an empty or all-skipped run must not report green."
-        type: boolean
-        default: false
-      build_only:
-        description: "Run only the build job (to seed the rstudio-tools / R-libs / GWT / sccache caches) and skip the e2e job."
-        type: boolean
-        default: false
-      post_pr_comment:
-        description: "Post test results as a sticky comment on the PR. Pass true only from PR-triggered callers."
-        type: boolean
-        default: false
-  workflow_call:
-    inputs:
-      build_from_source:
-        type: boolean
-        default: true
-      rstudio_installer_url:
-        type: string
-        default: ""
-      r_version:
-        type: string
-        default: ""
-      project:
-        type: string
-        default: "desktop"
-      grep:
-        type: string
-        default: ""
-      test_selector:
-        type: string
-        default: ""
-      test_ignore:
-        type: string
-        default: ""
-      grep_invert:
-        type: string
-        default: ""
-      rstudio_extra_args:
-        type: string
-        default: ""
-      posit_assistant_test_manifest:
-        type: boolean
-        default: false
-      require_tests_passed:
-        type: boolean
-        default: false
-      build_only:
-        type: boolean
-        default: false
-      post_pr_comment:
-        type: boolean
-        default: false
-      defer_merge:
-        description: "Skip this workflow's own merge/publish/comment job; the caller merges every platform's blobs into one report instead."
-        type: boolean
-        default: false
-      skip_e2e_deps_cache_save:
-        description: "Don't save the os-e2e-deps caches (R library, pak downloads, Playwright browsers). Set by broad-matrix callers whose engines run too rarely for those caches to outlive eviction."
-        type: boolean
-        default: false
-    outputs:
-      r_version_actual:
-        description: >-
-          The R version this engine actually ran against, read back from the
-          installed R rather than echoed from the r_version input. Empty when
-          the e2e job did not run (build_only, or a build failure), and also when
-          it ran but failed before reaching the R install.
-        value: ${{ jobs.e2e-desktop-macos27.outputs.r_version_actual }}
-    secrets:
-      CONNECT_API_KEY:
-        description: "Posit Connect API key for the E2E Test Insights reporter"
-        required: false
-      AWS_E2E_REPORTS_ROLE_ARN:
-        description: "IAM role assumed via GitHub OIDC to upload the Playwright report to S3"
-        required: false
-      OP_SERVICE_ACCOUNT_TOKEN:
-        description: "OP service account token; resolves the test-account credentials the Playwright auth setup project signs in with"
-        required: false
-
+# Triggers intentionally disabled for Argus-OSS-Security.
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       build_from_source:
+#         description: "Build RStudio Desktop from this branch's source. When false, downloads the latest daily .dmg installer."
+#         type: boolean
+#         default: true
+#       rstudio_installer_url:
+#         description: "Optional .dmg URL to test against (e.g. a specific daily from dailies.rstudio.com). Only used when build_from_source is false. Leave empty to auto-resolve the latest daily."
+#         type: string
+#         default: ""
+#       r_version:
+#         description: >-
+#           Exact R version to install, as X.Y.Z. Empty (the default) uses
+#           RSTUDIO_R_VERSION from dependencies/tools/rstudio-tools.sh, which is
+#           the single place the version CI tests against is pinned. Any version
+#           named here must already be mirrored into rstudio-buildtools; see
+#           dependencies/tools/upload-r.sh.
+#         type: string
+#         default: ""
+#       project:
+#         description: "Playwright project to run: 'desktop' or 'server'. OS and edition are auto-filtered from the host platform and PW_RSTUDIO_EDITION."
+#         type: string
+#         default: "desktop"
+#       grep:
+#         description: "Optional Playwright --grep pattern to run only tests whose title matches."
+#         type: string
+#         default: ""
+#       test_selector:
+#         description: "Optional test paths/files/directories to run (space-separated). Matched as substrings against test file paths. Examples: 'autocomplete.test.ts', 'tests/panes/misc/', 'autocomplete tests/panes/posit-assistant-chat/'. Leave empty to run all tests."
+#         type: string
+#         default: ""
+#       test_ignore:
+#         description: "Optional test paths/files/directories to exclude (space-separated globs). Examples: '**/code_suggestions.test.ts', '**/posit-assistant-chat/**'. Leave empty to exclude nothing."
+#         type: string
+#         default: ""
+#       grep_invert:
+#         description: "Optional Playwright --grep-invert pattern to skip tests by title. Empty by default (runs all tests)."
+#         type: string
+#         default: ""
+#       rstudio_extra_args:
+#         description: "Optional extra args passed to RStudio Desktop on launch (space-separated). Maps to PW_RSTUDIO_EXTRA_ARGS."
+#         type: string
+#         default: ""
+#       posit_assistant_test_manifest:
+#         description: "Test the pre-release (test) Posit Assistant manifest instead of the released one. Off by default: only the Posit Assistant release gate turns this on."
+#         type: boolean
+#         default: false
+#       require_tests_passed:
+#         description: "Fail the run if it passed zero tests. For release gates, where an empty or all-skipped run must not report green."
+#         type: boolean
+#         default: false
+#       build_only:
+#         description: "Run only the build job (to seed the rstudio-tools / R-libs / GWT / sccache caches) and skip the e2e job."
+#         type: boolean
+#         default: false
+#       post_pr_comment:
+#         description: "Post test results as a sticky comment on the PR. Pass true only from PR-triggered callers."
+#         type: boolean
+#         default: false
+#   workflow_call:
+#     inputs:
+#       build_from_source:
+#         type: boolean
+#         default: true
+#       rstudio_installer_url:
+#         type: string
+#         default: ""
+#       r_version:
+#         type: string
+#         default: ""
+#       project:
+#         type: string
+#         default: "desktop"
+#       grep:
+#         type: string
+#         default: ""
+#       test_selector:
+#         type: string
+#         default: ""
+#       test_ignore:
+#         type: string
+#         default: ""
+#       grep_invert:
+#         type: string
+#         default: ""
+#       rstudio_extra_args:
+#         type: string
+#         default: ""
+#       posit_assistant_test_manifest:
+#         type: boolean
+#         default: false
+#       require_tests_passed:
+#         type: boolean
+#         default: false
+#       build_only:
+#         type: boolean
+#         default: false
+#       post_pr_comment:
+#         type: boolean
+#         default: false
+#       defer_merge:
+#         description: "Skip this workflow's own merge/publish/comment job; the caller merges every platform's blobs into one report instead."
+#         type: boolean
+#         default: false
+#       skip_e2e_deps_cache_save:
+#         description: "Don't save the os-e2e-deps caches (R library, pak downloads, Playwright browsers). Set by broad-matrix callers whose engines run too rarely for those caches to outlive eviction."
+#         type: boolean
+#         default: false
+#     outputs:
+#       r_version_actual:
+#         description: >-
+#           The R version this engine actually ran against, read back from the
+#           installed R rather than echoed from the r_version input. Empty when
+#           the e2e job did not run (build_only, or a build failure), and also when
+#           it ran but failed before reaching the R install.
+#         value: ${{ jobs.e2e-desktop-macos27.outputs.r_version_actual }}
+#     secrets:
+#       CONNECT_API_KEY:
+#         description: "Posit Connect API key for the E2E Test Insights reporter"
+#         required: false
+#       AWS_E2E_REPORTS_ROLE_ARN:
+#         description: "IAM role assumed via GitHub OIDC to upload the Playwright report to S3"
+#         required: false
+#       OP_SERVICE_ACCOUNT_TOKEN:
+#         description: "OP service account token; resolves the test-account credentials the Playwright auth setup project signs in with"
+#         required: false
+# 
 permissions:
   contents: read
   pull-requests: write

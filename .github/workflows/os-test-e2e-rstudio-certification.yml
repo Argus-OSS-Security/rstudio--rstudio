@@ -24,62 +24,63 @@ name: "Test: E2E Playwright RStudio (Certification, Open Source)"
 # sentinel "distro" to say so, and the R they actually used is read back from the
 # installed R and reported, rather than assumed from the request.
 
-on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: "RStudio daily build to certify, given as the version string exactly as shown on dailies.rstudio.com (e.g. 2026.08.0-daily+185). Leave empty to certify the latest daily. Ignored when build_from_source is checked. Applies to every cell."
-        type: string
-        default: ""
-      build_from_source:
-        description: "Build every cell from source instead of installing a daily build. Overrides the version input."
-        type: boolean
-        default: false
-      cells:
-        description: "Which environments to run, space- or comma-separated (e.g. 'rocky9-x86_64 macos26'). Leave empty to run every cell marked default in .github/e2e-certification/matrix.json. An unknown name fails the run."
-        type: string
-        default: ""
-      r_overrides:
-        description: "Per-cell R version overrides as cell=version pairs, space- or comma-separated (e.g. 'rocky9-x86_64=4.3.3 macos26=4.5.1'). Versions are exact X.Y.Z and must already be mirrored into rstudio-buildtools. Anything not named here keeps its matrix.json version. An unknown name fails the run."
-        type: string
-        default: ""
-      test_selector:
-        description: "Optional test paths/files to run instead of the whole suite (space-separated), e.g. 'sandbox.test.ts'. A real certification run leaves this empty; it exists so the workflow itself can be smoke-tested without paying for a full matrix."
-        type: string
-        default: ""
-  # Callable so the workflow can be exercised end to end from a push-triggered
-  # caller: workflow_dispatch only reaches workflows already on the default
-  # branch, which a new or edited one is not.
-  workflow_call:
-    inputs:
-      version:
-        type: string
-        default: ""
-      build_from_source:
-        type: boolean
-        default: false
-      cells:
-        type: string
-        default: ""
-      r_overrides:
-        type: string
-        default: ""
-      test_selector:
-        type: string
-        default: ""
-    secrets:
-      CONNECT_API_KEY:
-        required: false
-      AWS_E2E_REPORTS_ROLE_ARN:
-        required: false
-      # Every engine declares this optional, so omitting it fails nothing: each
-      # cell just warns that AI-gated tests will skip, and still reports success.
-      # A certification run that quietly covers less than the weekly rotation is
-      # the one result this workflow must not produce, so forward it like every
-      # other caller does.
-      OP_SERVICE_ACCOUNT_TOKEN:
-        required: false
-
+# Triggers intentionally disabled for Argus-OSS-Security.
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       version:
+#         description: "RStudio daily build to certify, given as the version string exactly as shown on dailies.rstudio.com (e.g. 2026.08.0-daily+185). Leave empty to certify the latest daily. Ignored when build_from_source is checked. Applies to every cell."
+#         type: string
+#         default: ""
+#       build_from_source:
+#         description: "Build every cell from source instead of installing a daily build. Overrides the version input."
+#         type: boolean
+#         default: false
+#       cells:
+#         description: "Which environments to run, space- or comma-separated (e.g. 'rocky9-x86_64 macos26'). Leave empty to run every cell marked default in .github/e2e-certification/matrix.json. An unknown name fails the run."
+#         type: string
+#         default: ""
+#       r_overrides:
+#         description: "Per-cell R version overrides as cell=version pairs, space- or comma-separated (e.g. 'rocky9-x86_64=4.3.3 macos26=4.5.1'). Versions are exact X.Y.Z and must already be mirrored into rstudio-buildtools. Anything not named here keeps its matrix.json version. An unknown name fails the run."
+#         type: string
+#         default: ""
+#       test_selector:
+#         description: "Optional test paths/files to run instead of the whole suite (space-separated), e.g. 'sandbox.test.ts'. A real certification run leaves this empty; it exists so the workflow itself can be smoke-tested without paying for a full matrix."
+#         type: string
+#         default: ""
+#   # Callable so the workflow can be exercised end to end from a push-triggered
+#   # caller: workflow_dispatch only reaches workflows already on the default
+#   # branch, which a new or edited one is not.
+#   workflow_call:
+#     inputs:
+#       version:
+#         type: string
+#         default: ""
+#       build_from_source:
+#         type: boolean
+#         default: false
+#       cells:
+#         type: string
+#         default: ""
+#       r_overrides:
+#         type: string
+#         default: ""
+#       test_selector:
+#         type: string
+#         default: ""
+#     secrets:
+#       CONNECT_API_KEY:
+#         required: false
+#       AWS_E2E_REPORTS_ROLE_ARN:
+#         required: false
+#       # Every engine declares this optional, so omitting it fails nothing: each
+#       # cell just warns that AI-gated tests will skip, and still reports success.
+#       # A certification run that quietly covers less than the weekly rotation is
+#       # the one result this workflow must not produce, so forward it like every
+#       # other caller does.
+#       OP_SERVICE_ACCOUNT_TOKEN:
+#         required: false
+# 
 concurrency:
   # Certification runs are hand-launched against a named build, so two of them
   # are normally deliberate -- and the version is what makes them distinct. It is

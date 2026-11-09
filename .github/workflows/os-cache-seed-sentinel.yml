@@ -13,12 +13,13 @@ name: "Cache Seed: Sentinel (re-seed evicted E2E build caches)"
 # the PR orchestrator, so they are deliberately absent from the checks below.
 # macOS 14's routine runs install the daily .dmg and skip its build job, so the
 # build caches a seed would maintain are never read on that path.
-on:
-  schedule:
-    # Every 2 hours, offset from the nightly seeds (07:00 / 07:30 UTC).
-    - cron: '45 */2 * * *'
-  workflow_dispatch:
-
+# Triggers intentionally disabled for Argus-OSS-Security.
+# on:
+#   schedule:
+#     # Every 2 hours, offset from the nightly seeds (07:00 / 07:30 UTC).
+#     - cron: '45 */2 * * *'
+#   workflow_dispatch:
+# 
 concurrency:
   group: cache-seed-sentinel
   cancel-in-progress: true

@@ -8,28 +8,29 @@ name: "Cache: Seed macOS 15 x86_64 build caches"
 # saves land in main's scope, which every PR (based on main) can then restore
 # via the restore-keys prefixes (rstudio-tools-x86_64-, etc.). Without this,
 # every new PR branch starts 100% cold on its first build.
-on:
-  # Re-seed when files under dependencies/ change. This glob is deliberately a
-  # broad superset of the exact hashFiles() patterns that feed the cache keys
-  # (see the build workflow), so the trigger paths don't have to stay in
-  # lockstep with those patterns. Most edits here re-run the seed without
-  # changing any key (a quiet refresh); an edit that touches one of the hashed
-  # files additionally rotates the affected key, saving a fresh cache on main.
-  push:
-    branches: [main]
-    paths:
-      - "dependencies/**"
-      - ".github/workflows/os-test-e2e-rstudio-desktop-os-macos-15-x86_64.yml"
-      - ".github/workflows/os-cache-seed-e2e-macos-15-x86_64.yml"
-  # Nightly re-seed keeps the sccache object cache recent on main so PR
-  # builds get a high compile-cache hit rate.
-  schedule:
-    - cron: '0 7 * * *'
-  # Also dispatched by os-cache-seed-sentinel.yml when this seed's caches
-  # have been evicted from main's scope (repo quota, LRU eviction).
-  workflow_dispatch:
-
-# Don't stack expensive macOS builds; the latest seed run wins.
+# Triggers intentionally disabled for Argus-OSS-Security.
+# on:
+#   # Re-seed when files under dependencies/ change. This glob is deliberately a
+#   # broad superset of the exact hashFiles() patterns that feed the cache keys
+#   # (see the build workflow), so the trigger paths don't have to stay in
+#   # lockstep with those patterns. Most edits here re-run the seed without
+#   # changing any key (a quiet refresh); an edit that touches one of the hashed
+#   # files additionally rotates the affected key, saving a fresh cache on main.
+#   push:
+#     branches: [main]
+#     paths:
+#       - "dependencies/**"
+#       - ".github/workflows/os-test-e2e-rstudio-desktop-os-macos-15-x86_64.yml"
+#       - ".github/workflows/os-cache-seed-e2e-macos-15-x86_64.yml"
+#   # Nightly re-seed keeps the sccache object cache recent on main so PR
+#   # builds get a high compile-cache hit rate.
+#   schedule:
+#     - cron: '0 7 * * *'
+#   # Also dispatched by os-cache-seed-sentinel.yml when this seed's caches
+#   # have been evicted from main's scope (repo quota, LRU eviction).
+#   workflow_dispatch:
+# 
+# # Don't stack expensive macOS builds; the latest seed run wins.
 concurrency:
   group: cache-seed-macos-15-x86_64
   cancel-in-progress: true
